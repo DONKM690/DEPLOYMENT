@@ -1,0 +1,11 @@
+Backend/envt/
+Backend/venv/
+
+.env
+db.sqlite3
+
+__pycache__/
+*.pyc
+
+contact/node_module/
+contact/build/

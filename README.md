@@ -29,7 +29,7 @@ A full-stack web application built using React.js for the frontend and Django RE
 
 ## Live Demo
 
-https://your-deployment-link.com
+deployment-cyan.vercel.app
 
 ## Author
 

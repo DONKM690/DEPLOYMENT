@@ -11,7 +11,7 @@ function App() {
   });
 
   // Local testing
-  const API = "http://127.0.0.1:8000/api";
+  const API = "https://donkm.pythonanywhere.com/api";
 
   // Deployment kazhinjal:
   // const API = "https://donkm.pythonanywhere.com/api";

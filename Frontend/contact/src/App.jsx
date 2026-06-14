@@ -1,14 +1,21 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [formData, setFormData]=useState({
-    name:"",
-    email:"",
-    message:"",
+  const [responseMessage, setResponseMessage] = useState("");
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
   });
 
-  const [responseMessage,setResponseMessage]=useState("");
+  // Local testing
+  const API = "http://127.0.0.1:8000/api";
+
+  // Deployment kazhinjal:
+  // const API = "https://donkm.pythonanywhere.com/api";
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,63 +26,74 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   const response = await fetch(
-  "https://donkm.pythonanywhere.com/api/contact/",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  }
-);
+    try {
+      const response = await fetch(`${API}/contact/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data= await response.json();
-    setResponseMessage(data.message);
+      if (response.ok) {
+        setResponseMessage("✅ Message Sent Successfully");
 
-    setFormData({
-      name:"",
-      email:"",
-      message:""
-    });
+        setFormData({
+          name: "",
+          email: "",
+          message: "",
+        });
+      } else {
+        setResponseMessage("❌ Something went wrong");
+      }
+    } catch (error) {
+      setResponseMessage("❌ Server Error");
+    }
   };
+
   return (
-    <div>
-      <h1>Contact Form</h1>
-      <form onSubmit={handleSubmit}>
-        <label>Name:</label>
-        <br />
-        <input type="text"
-        name='name'
-        value={formData.name}
-        onChange={handleChange} 
-        />
-        <br />
+    <div className="container">
+      <h1>Contact Management System</h1>
 
-        <label>Email:</label>
-        <br />
-        <input type="email"
-        name='email'
-        value={formData.email}
-        onChange={handleChange}
+      <form onSubmit={handleSubmit} className="form">
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
-        <br />
 
-        <label>Message:</label>
-        <br />
-       <textarea name="message"
-        value={formData.message}
-        onChange={handleChange} 
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
         />
-        <br />
 
-        <button type='submit'>
-          send message
+        <textarea
+          name="message"
+          placeholder="Enter Message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit">
+          Send Message
         </button>
       </form>
-      <p>{responseMessage}</p>
+
+      {responseMessage && (
+        <p className="success-message">
+          {responseMessage}
+        </p>
+      )}
     </div>
   );
 }
 
-export default App
+export default App;
